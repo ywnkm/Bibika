@@ -13,7 +13,7 @@ public data class LiveEntryEffect(
     @Serializable
     public data class Data(
         val id: Int,
-        val uid: Int,
+        val uid: Long,
         @SerialName("target_id")
         val targetId: Int,
         @SerialName("mock_effect")

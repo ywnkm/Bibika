@@ -4,10 +4,7 @@ import com.elouyi.bbk.BBKAttributes
 import com.elouyi.bbk.Bibika
 import com.elouyi.bbk.utils.BBKInternalAPI
 import io.ktor.utils.io.core.*
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import mu.KLogger
 import mu.KotlinLogging
 import kotlin.coroutines.CoroutineContext
@@ -30,6 +27,8 @@ public interface BiliAPP : CoroutineScope, Closeable {
 
     public val logger: KLogger
 
+    public suspend fun join()
+
     @BBKInternalAPI
     public fun install(bbk: Bibika)
 }
@@ -42,6 +41,10 @@ public abstract class AbstractBiliAPP(
     override val coroutineContext: CoroutineContext = SupervisorJob() + CoroutineName(name)
 
     override val logger: KLogger = KotlinLogging.logger(name)
+
+    override suspend fun join() {
+        coroutineContext.job.join()
+    }
 
     override fun install(bbk: Bibika) {
 
