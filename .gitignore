@@ -1,0 +1,8 @@
+
+/.gradle/
+
+/buildSrc/build
+/buildSrc/.gradle
+
+/build
+/bbk-core/build
