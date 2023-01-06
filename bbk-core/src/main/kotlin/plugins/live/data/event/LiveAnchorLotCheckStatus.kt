@@ -1,5 +1,6 @@
 package com.elouyi.bbk.plugins.live.data.event
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -13,7 +14,10 @@ public data class LiveAnchorLotCheckStatus(
     public data class Data(
         val id: Int,
         val status: Int,
-        val uid: Long
+        val uid: Long,
+        @Contextual
+        val reject_danmu: Nothing? = null,
+        val reject_reason: String?,
     )
 
     public companion object : LiveEvent.CMDEvent.CMDEventHelper<LiveAnchorLotCheckStatus> {

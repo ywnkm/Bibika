@@ -192,7 +192,7 @@ public data class LiveSendGift(
             val medalName: String,
             val special: String,
             @SerialName("target_id")
-            val targetId: Int,
+            val targetId: Long,
         )
 
         @Serializable
