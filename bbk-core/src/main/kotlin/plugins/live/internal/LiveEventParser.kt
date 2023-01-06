@@ -78,7 +78,7 @@ internal object LiveEventParser {
         } catch (e: Exception) {
             println(jsonString)
             e.printStackTrace()
-            throw e
+            LiveEvent.CMDEvent.UnknownCMDEvent(body, jsonString)
         }
     }
 

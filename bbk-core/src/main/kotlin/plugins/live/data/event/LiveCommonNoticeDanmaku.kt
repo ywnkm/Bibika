@@ -12,8 +12,14 @@ public data class LiveCommonNoticeDanmaku(
 
     @Serializable
     public data class Data(
+        @SerialName("biz_id")
+        val bizId: Long?,
         @SerialName("content_segments")
         val contentSegments: List<ContentSegment>,
+        @SerialName("danmaku_style")
+        val danmakuStyle: DanmakuStyle?,
+        @SerialName("danmaku_uri")
+        val danmakuUri: String?,
         val dmscore: Int,
         val terminals: List<Int>,
     ) {
@@ -30,6 +36,20 @@ public data class LiveCommonNoticeDanmaku(
             val highlightFontColorDark: String,
             val text: String,
             val type: Int,
+        )
+
+        @Serializable
+        public data class DanmakuStyle(
+            @SerialName("background_color")
+            val backgroundColor: List<String>,
+            @SerialName("background_color_dark")
+            val backgroundColorDark: List<String>,
+            @SerialName("highlight_font_color")
+            val highlightFontColor: String?,
+            @SerialName("highlight_font_color_dark")
+            val highlightFontColorDark: String?,
+            val text: String?,
+            val type: Int?,
         )
     }
 

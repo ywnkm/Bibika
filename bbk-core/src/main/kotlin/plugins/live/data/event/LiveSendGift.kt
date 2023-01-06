@@ -23,8 +23,7 @@ public data class LiveSendGift(
         @SerialName("biz_source")
         val bizSource: String,
         @SerialName("blind_gift")
-        @Contextual
-        val blindGift: Nothing? = null,
+        val blindGift: BlindGift?,
         @SerialName("broadcast_id")
         val broadcastId: Int,
         @SerialName("coin_type")
@@ -120,8 +119,7 @@ public data class LiveSendGift(
             @SerialName("batch_combo_num")
             val batchComboNum: Int,
             @SerialName("blind_gift")
-            @Contextual
-            val blindGift: Nothing? = null,
+            val blindGift: BlindGift?,
             @SerialName("gift_id")
             val giftId: Int,
             @SerialName("gift_name")
@@ -133,6 +131,19 @@ public data class LiveSendGift(
             val sendMaster: Nothing? = null,
             val uid: Long,
             val uname: String,
+        )
+
+        @Serializable
+        public data class BlindGift(
+            @SerialName("blind_gift_config_id")
+            val blindGiftConfigId: Int,
+            val from: Int,
+            @SerialName("gift_action")
+            val giftAction: String,
+            @SerialName("original_gift_id")
+            val originalGiftId: Int,
+            @SerialName("original_gift_name")
+            val originalGiftName: String,
         )
 
         @Serializable

@@ -53,9 +53,9 @@ public data class LiveEntryEffect(
         val triggerTime: Long,
         val identities: Int,
         @SerialName("effect_silent_time")
-        val effectSilentTime: Int,
+        val effectSilentTime: Double,
         @SerialName("effective_time_new")
-        val effectiveTimeNew: Int,
+        val effectiveTimeNew: Double,
         @SerialName("web_dynamic_url_webp")
         val webDynamicUrlWebp: String,
         @SerialName("web_dynamic_url_apng")

@@ -1,5 +1,6 @@
 package com.elouyi.bbk.plugins.live.data.event
 
+import com.elouyi.bbk.utils.BBKExperimentalAPI
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -12,17 +13,22 @@ public data class LiveWidgetBanner(
 ) : LiveEvent.CMDEvent {
 
     @Serializable
-    public data class Data(
+    public data class Data constructor(
         val timestamp: Long,
         @SerialName("widget_list")
+        @OptIn(BBKExperimentalAPI::class)
         val widgetList: WidgetList,
     ) {
 
         @Serializable
+        @BBKExperimentalAPI
         public data class WidgetList(
             @SerialName("303")
             @Contextual
-            val _303: Nothing? = null
+            val _303: Nothing? = null,
+            @SerialName("306")
+            @Contextual
+            val _306: Nothing? = null
         )
     }
 
