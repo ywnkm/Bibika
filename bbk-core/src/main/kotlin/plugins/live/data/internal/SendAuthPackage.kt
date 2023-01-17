@@ -1,5 +1,7 @@
 package com.elouyi.bbk.plugins.live.data.internal
 
+import com.elouyi.bbk.plugins.live.data.LivePackage
+import com.elouyi.bbk.plugins.live.data.OutgoingLivePackage
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -11,7 +13,7 @@ internal class SendAuthPackage(
     platform: String = "web",
     type: Int = 2,
     key: String = "",
-) : LivePackage() {
+) : OutgoingLivePackage() {
 
     override val body: ByteArray = buildJsonObject {
         put("uid", uid)

@@ -2,7 +2,7 @@ package com.elouyi.bbk.plugins.live.internal
 
 import com.elouyi.bbk.plugins.live.data.event.LiveEvent
 import com.elouyi.bbk.plugins.live.data.event.LiveHeartbeat
-import com.elouyi.bbk.plugins.live.data.internal.LivePackage
+import com.elouyi.bbk.plugins.live.data.LivePackage
 import com.elouyi.bbk.utils.decodeBrotli
 import com.elouyi.bbk.utils.hexToString
 import io.ktor.utils.io.core.*
@@ -22,7 +22,6 @@ internal object LiveEventParser {
         when (head.protoVer.toInt())  {
             0, 1 -> result.add(parseEvent2(head, data))
 
-            //1 -> result.add(parseHeartbeat(data, bodyLen))
             2 -> {
                 println("Zlib packet not supported yet.\n${data.readBytes(bodyLen).hexToString()}")
             }
@@ -36,7 +35,7 @@ internal object LiveEventParser {
                 } catch (e: Exception) {
                     e.printStackTrace()
                     println(head)
-                    println("3.2 data: \n${body.hexToString()}")
+                    println("Error data: \n${body.hexToString()}")
                 }
             }
             else -> println("Else??? ${head.protoVer}\n${data.readBytes(bodyLen).hexToString()}")

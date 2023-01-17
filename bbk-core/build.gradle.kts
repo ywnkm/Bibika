@@ -14,6 +14,15 @@ sourceSets {
 
 kotlin {
     explicitApi()
+
+    sourceSets {
+        val main by getting {
+            languageSettings {
+                enableLanguageFeature("ContextReceivers")
+            }
+        }
+    }
+
 }
 
 dependencies {

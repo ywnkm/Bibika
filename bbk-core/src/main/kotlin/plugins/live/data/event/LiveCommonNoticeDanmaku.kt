@@ -29,11 +29,11 @@ public data class LiveCommonNoticeDanmaku(
             @SerialName("font_color")
             val fontColor: String,
             @SerialName("font_color_dark")
-            val fontColorDark: String,
+            val fontColorDark: String?,
             @SerialName("highlight_font_color")
-            val highlightFontColor: String,
+            val highlightFontColor: String?,
             @SerialName("highlight_font_color_dark")
-            val highlightFontColorDark: String,
+            val highlightFontColorDark: String?,
             val text: String,
             val type: Int,
         )

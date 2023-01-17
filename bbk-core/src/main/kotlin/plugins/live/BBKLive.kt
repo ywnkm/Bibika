@@ -15,7 +15,10 @@ public class BBKLive internal constructor(
     internal lateinit var bbk: Bibika
     internal lateinit var api: LiveAPI
 
-    public class Config
+    public class Config {
+
+        public var liveHeartbeatInterval: Long = 15_000
+    }
 
     public companion object Plugin : BBKPlugin<Config, BBKLive> {
 
@@ -39,5 +42,5 @@ public val Bibika.live: LiveAPI
 public suspend inline fun <reified E : LiveEvent> Bibika.liveEvent(
     roomId: Long,
     context: CoroutineContext = EmptyCoroutineContext,
-    noinline block: suspend (E) -> Unit
+    noinline block: suspend LiveRoom.(E) -> Unit
 ): Job = this.live.liveEvent(roomId, context, block)

@@ -89,7 +89,7 @@ public data class LiveRoomInfo(
     public data class Data(
         val uid: Int,
         @SerialName("room_id")
-        val roomId: Int,
+        val roomId: Long,
         @SerialName("short_id")
         val shortId: Int,
         val attention: Int,

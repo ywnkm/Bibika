@@ -3,6 +3,7 @@ package com.elouyi.bbk.plugins.live.data.event
 import com.elouyi.bbk.utils.BBKExperimentalAPI
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 import kotlin.reflect.KClass
 
 @Serializable
@@ -15,8 +16,7 @@ public data class LiveWidgetBanner(
     public data class Data constructor(
         val timestamp: Long,
         @SerialName("widget_list")
-        @OptIn(BBKExperimentalAPI::class)
-        val widgetList: WidgetList,
+        val widgetList: JsonObject,
     ) {
 
         @Serializable

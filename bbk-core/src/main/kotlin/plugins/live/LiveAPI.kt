@@ -24,11 +24,11 @@ public class LiveAPI(
 
     private val logger get() = live.bbk.app.logger
 
-    public suspend fun getRoomInfo(roomId: Int): LiveRoomInfo {
+    public suspend fun getRoomInfo(roomId: Long): LiveRoomInfo {
         return live.bbk.client.get("https://api.live.bilibili.com/room/v1/Room/get_info?room_id=$roomId").body()
     }
 
-    public suspend fun danmuInfo(roomId: Int): DanmuInfoData {
+    public suspend fun danmuInfo(roomId: Long): DanmuInfoData {
         logger.trace { "Get xlive danmu info, room id: $roomId" }
         return live.bbk.client.get("https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=$roomId") {
 
@@ -39,9 +39,10 @@ public class LiveAPI(
         roomId: Long,
         kClass: KClass<E>,
         context: CoroutineContext = EmptyCoroutineContext,
-        listener: suspend (E) -> Unit
+        listener: suspend LiveRoom.(E) -> Unit
     ): Job {
-        val realRoomId = getRoomInfo(roomId.toInt()).data.roomId
+        val roomInfo = getRoomInfo(roomId).data
+        val realRoomId = roomInfo.roomId
         val danmuInfo = danmuInfo(realRoomId)
         val hostList = danmuInfo.data?.hostList
         if (hostList == null) {
@@ -52,7 +53,7 @@ public class LiveAPI(
         logger.info { "Host list: $hostList" }
         val authPackage = SendAuthPackage(
             uid = 0,
-            roomId = realRoomId.toLong(),
+            roomId = realRoomId,
             key = danmuInfo.data.token
         ).build()
 
@@ -64,9 +65,10 @@ public class LiveAPI(
             ) {
                 outgoing.send(Frame.Binary(true, authPackage))
                 flush()
+                val liveRoom = LiveRoom(roomInfo)
                 launch {
                     while (isActive) {
-                        delay(15_000)
+                        delay(live.config.liveHeartbeatInterval)
                         logger.trace { "Send live room ($realRoomId) heartbeat." }
                         outgoing.send(Frame.Binary(true, heartbeat))
                     }
@@ -77,7 +79,8 @@ public class LiveAPI(
                         val events = LiveEventParser.parseEvent(ByteReadPacket(res.readBytes()))
                         events.forEach {
                             if (it.instanceOf(kClass)) {
-                                listener(it as E)
+                                @Suppress("Unchecked_Cast")
+                                listener(liveRoom, it as E)
                             }
                         }
                     }
@@ -89,7 +92,7 @@ public class LiveAPI(
     public suspend inline fun <reified E : LiveEvent> liveEvent(
         roomId: Long,
         context: CoroutineContext = EmptyCoroutineContext,
-        noinline listener: suspend (E) -> Unit
+        noinline listener: suspend LiveRoom.(E) -> Unit
     ): Job = liveEvent(roomId, E::class, context, listener)
 
     public companion object {
