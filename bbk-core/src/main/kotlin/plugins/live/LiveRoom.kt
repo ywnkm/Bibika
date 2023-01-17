@@ -18,7 +18,7 @@ public class LiveRoom(
     }
 
     public suspend fun send(byteArray: ByteArray) {
-        outgoing.send(Frame.Binary(true, byteArray))
+        send(Frame.Binary(true, byteArray))
     }
 
     public suspend fun cancelSession(cause: Throwable) {

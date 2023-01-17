@@ -55,7 +55,7 @@ public class LiveAPI(
             uid = 0,
             roomId = realRoomId,
             key = danmuInfo.data.token
-        ).build()
+        )
 
         return live.bbk.app.launch(context) la@ {
             live.bbk.client.wss(
@@ -63,14 +63,14 @@ public class LiveAPI(
                 port = danmuInfo.data.hostList.last().wssPort,
                 path = "/sub"
             ) {
-                outgoing.send(Frame.Binary(true, authPackage))
-                flush()
                 val liveRoom = LiveRoom(roomInfo)
+                liveRoom.send(authPackage)
+                flush()
                 launch {
                     while (isActive) {
                         delay(live.config.liveHeartbeatInterval)
                         logger.trace { "Send live room ($realRoomId) heartbeat." }
-                        outgoing.send(Frame.Binary(true, heartbeat))
+                        liveRoom.send(heartbeat)
                     }
                 }
                 while (isActive) {
