@@ -3,6 +3,8 @@ package com.elouyi.bbk.plugins.live.data.event
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
 import kotlin.reflect.KClass
 
 @Serializable
@@ -86,8 +88,7 @@ public data class LiveSendGift(
         val remain: Int,
         val rnd: String,
         @SerialName("send_master")
-        @Contextual
-        val sendMaster: Nothing? = null,
+        val sendMaster: JsonObject?,
         val silver: Int,
         @SerialName("super")
         val super0: Int,
@@ -103,8 +104,7 @@ public data class LiveSendGift(
         val tid: String,
         val timestamp: Int,
         @SerialName("top_list")
-        @Contextual
-        val topList: Nothing? = null,
+        val topList: JsonArray?,
         @SerialName("total_coin")
         val totalCoin: Int,
         val uid: Long,
@@ -127,8 +127,7 @@ public data class LiveSendGift(
             @SerialName("gift_num")
             val giftNum: Int,
             @SerialName("send_master")
-            @Contextual
-            val sendMaster: Nothing? = null,
+            val sendMaster: JsonObject?,
             val uid: Long,
             val uname: String,
         )
@@ -160,8 +159,7 @@ public data class LiveSendGift(
             @SerialName("gift_num")
             val giftNum: Int,
             @SerialName("send_master")
-            @Contextual
-            val sendMaster: Nothing? = null,
+            val sendMaster: JsonObject?,
             val uid: Long,
             val uname: String,
         )

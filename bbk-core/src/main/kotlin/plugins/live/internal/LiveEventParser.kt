@@ -3,6 +3,7 @@ package com.elouyi.bbk.plugins.live.internal
 import com.elouyi.bbk.plugins.live.data.event.LiveEvent
 import com.elouyi.bbk.plugins.live.data.event.LiveHeartbeat
 import com.elouyi.bbk.plugins.live.data.LivePackage
+import com.elouyi.bbk.plugins.live.data.event.internal.LiveCMDParseFailed
 import com.elouyi.bbk.utils.decodeBrotli
 import com.elouyi.bbk.utils.hexToString
 import io.ktor.utils.io.core.*
@@ -73,7 +74,12 @@ internal object LiveEventParser {
             if (kClass == LiveEvent.CMDEvent.UnknownCMDEvent::class) {
                 return LiveEvent.CMDEvent.UnknownCMDEvent(body, jsonString)
             }
-            Json.decodeFromString(kClass.serializer(), jsonString)
+            try {
+                Json.decodeFromString(kClass.serializer(), jsonString)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                LiveCMDParseFailed(cmd, jsonString, e)
+            }
         } catch (e: Exception) {
             println(jsonString)
             e.printStackTrace()

@@ -51,40 +51,11 @@ public class LiveAPI(
             throw Exception(errorMsg)
         }
         logger.info { "Host list: $hostList" }
-        val authPackage = SendAuthPackage(
-            uid = 0,
-            roomId = realRoomId,
-            key = danmuInfo.data.token
-        )
 
-        return live.bbk.app.launch(context) la@ {
-            live.bbk.client.wss(
-                host = danmuInfo.data.hostList.last().host ,
-                port = danmuInfo.data.hostList.last().wssPort,
-                path = "/sub"
-            ) {
-                val liveRoom = LiveRoom(roomInfo)
-                liveRoom.send(authPackage)
-                flush()
-                launch {
-                    while (isActive) {
-                        delay(live.config.liveHeartbeatInterval)
-                        logger.trace { "Send live room ($realRoomId) heartbeat." }
-                        liveRoom.send(heartbeat)
-                    }
-                }
-                while (isActive) {
-                    val res = incoming.receive()
-                    launch {
-                        val events = LiveEventParser.parseEvent(ByteReadPacket(res.readBytes()))
-                        events.forEach {
-                            if (it.instanceOf(kClass)) {
-                                @Suppress("Unchecked_Cast")
-                                listener(liveRoom, it as E)
-                            }
-                        }
-                    }
-                }
+        return startListen(roomInfo, danmuInfo.data.token, hostList.last(), 0, context) {
+            if (it.instanceOf(kClass)) {
+                @Suppress("UNCHECKED_CAST")
+                listener(this, it as E)
             }
         }
     }
@@ -94,6 +65,61 @@ public class LiveAPI(
         context: CoroutineContext = EmptyCoroutineContext,
         noinline listener: suspend LiveRoom.(E) -> Unit
     ): Job = liveEvent(roomId, E::class, context, listener)
+
+    public fun <E : LiveEvent> liveEventAsync(
+        roomId: Long,
+        kClass: KClass<E>,
+        context: CoroutineContext = EmptyCoroutineContext,
+        listener: suspend LiveRoom.(E) -> Unit
+    ): Job = live.bbk.app.launch { liveEvent(roomId, kClass, context, listener) }
+
+    public inline fun <reified E : LiveEvent> liveEventAsync(
+        roomId: Long,
+        context: CoroutineContext = EmptyCoroutineContext,
+        noinline listener: suspend LiveRoom.(E) -> Unit
+    ): Job = liveEventAsync(roomId, E::class, context, listener)
+
+    private fun <T> startListen(
+        roomInfo: LiveRoomInfo.Data,
+        token: String,
+        host: DanmuInfoData.Data.Host,
+        uid: Long = 0,
+        context: CoroutineContext = EmptyCoroutineContext,
+        listener: T,
+    ): Job where T : suspend LiveRoom.(LiveEvent) -> Unit {
+        val authPackage = SendAuthPackage(
+            uid = uid,
+            roomId = roomInfo.roomId,
+            key = token
+        )
+        return live.bbk.app.launch(context) {
+            live.bbk.client.wss(
+                host = host.host,
+                port = host.wssPort,
+                path = "/sub"
+            ) {
+                val liveRoom = LiveRoom(roomInfo)
+                liveRoom.send(authPackage)
+                flush()
+                launch {
+                    while (isActive) {
+                        delay(live.config.liveHeartbeatInterval)
+                        logger.trace { "Send live room (${roomInfo.roomId}) heartbeat." }
+                        liveRoom.send(heartbeat)
+                    }
+                }
+                while (isActive) {
+                    val res = incoming.receive()
+                    launch {
+                        val events = LiveEventParser.parseEvent(ByteReadPacket(res.readBytes()))
+                        events.forEach {
+                            listener(liveRoom, it)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public companion object {
 

@@ -1,8 +1,6 @@
 package com.elouyi.bbk
 
-import com.elouyi.bbk.app.BiliAPP
-import com.elouyi.bbk.app.BiliAPPConfig
-import com.elouyi.bbk.app.BiliAPPFactory
+import com.elouyi.bbk.app.*
 import com.elouyi.bbk.utils.BBKInternalAPI
 import com.elouyi.bbk.utils.getDep
 import io.ktor.client.*
@@ -25,6 +23,10 @@ public fun <T : BiliAPPConfig> Bibika(
     val config = BBKConfig<T>().apply(block)
     return Bibika(factory.create(), config)
 }
+
+public fun Bibika(
+    block: BBKConfig<WebAPPConfig>.() -> Unit = {}
+): Bibika = Bibika(WebAPP, block)
 
 public class Bibika(
     public val app: BiliAPP,
