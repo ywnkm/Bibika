@@ -13,13 +13,13 @@ public data class LiveCommonNoticeDanmaku(
     @Serializable
     public data class Data(
         @SerialName("biz_id")
-        val bizId: Long?,
+        val bizId: Long? = null,
         @SerialName("content_segments")
         val contentSegments: List<ContentSegment>,
         @SerialName("danmaku_style")
-        val danmakuStyle: DanmakuStyle?,
+        val danmakuStyle: DanmakuStyle? = null,
         @SerialName("danmaku_uri")
-        val danmakuUri: String?,
+        val danmakuUri: String? = null,
         val dmscore: Int,
         val terminals: List<Int>,
     ) {
@@ -29,11 +29,11 @@ public data class LiveCommonNoticeDanmaku(
             @SerialName("font_color")
             val fontColor: String,
             @SerialName("font_color_dark")
-            val fontColorDark: String?,
+            val fontColorDark: String? = null,
             @SerialName("highlight_font_color")
-            val highlightFontColor: String?,
+            val highlightFontColor: String? = null,
             @SerialName("highlight_font_color_dark")
-            val highlightFontColorDark: String?,
+            val highlightFontColorDark: String? = null,
             val text: String,
             val type: Int,
         )

@@ -36,6 +36,8 @@ public interface LiveEvent {
             }
         }
 
+        public interface PKEvent : CMDEvent
+
         public companion object {
 
             private val cmds: List<CMDEventHelper<*>> =

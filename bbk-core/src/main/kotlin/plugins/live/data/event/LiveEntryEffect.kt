@@ -15,7 +15,7 @@ public data class LiveEntryEffect(
         val id: Int,
         val uid: Long,
         @SerialName("target_id")
-        val targetId: Int,
+        val targetId: Long,
         @SerialName("mock_effect")
         val mockEffect: Int,
         val face: String,

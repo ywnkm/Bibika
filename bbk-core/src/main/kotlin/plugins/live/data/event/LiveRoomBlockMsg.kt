@@ -2,6 +2,7 @@ package com.elouyi.bbk.plugins.live.data.event
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 public data class LiveRoomBlockMsg(
@@ -19,4 +20,9 @@ public data class LiveRoomBlockMsg(
         val uid: Long,
         val uname: String,
     )
+
+    public companion object : LiveEvent.CMDEvent.CMDEventHelper<LiveRoomBlockMsg> {
+        override val cmd: String = "ROOM_BLOCK_MSG"
+        override val kClass: KClass<LiveRoomBlockMsg> = LiveRoomBlockMsg::class
+    }
 }

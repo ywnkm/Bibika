@@ -11,7 +11,7 @@ public data class LiveLive(
     val sub_session_key: String,
     val live_platform: String,
     val live_model: Int,
-    val live_time: Long,
+    val live_time: Long?,
     val roomid: Long
 ) : LiveEvent.CMDEvent {
 

@@ -87,7 +87,7 @@ public data class LiveRoomInfo(
 
     @Serializable
     public data class Data(
-        val uid: Int,
+        val uid: Long,
         @SerialName("room_id")
         val roomId: Long,
         @SerialName("short_id")
